@@ -1,8 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: main
-
+    branches: [main, draft]
 name: Quarto Publish
 
 jobs:
@@ -26,6 +25,10 @@ jobs:
         uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 1
+
+      - name: Download images
+        run: |
+          make images
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
