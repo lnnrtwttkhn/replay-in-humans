@@ -6,3 +6,73 @@ engine: knitr
 abstract: "This is the abstract."
 abstract-title: "Abstract"
 ---
+
+## Introduction
+
+How does the brain use past experience to guide future actions?
+A particularly interesting phenomenon in this context is replay, typically described as the reactivation of activity patterns in the brain that reflect previous experiences.
+
+Most insights about replay have come from electrophysiological studies of rodent spatial navigation.
+In these studies, replay is often investigated as follows: A rodent navigates a spatial environment, such as a simple linear track.
+In the rodent's brain, cells in the hippocampus, known as place cells, are activated when the animal occupies a specific location in that environment.
+As the rodent moves along the track, these place cells are activated in a specific sequential order that reflects the animal's trajectory (see @fig-linear-track).
+
+![Rodent on a linear track. Adapted from @carr2011nn.](images/replay-linear-track-activation-movement){#fig-linear-track width="60%"}
+
+The fascinating part happens when the rodent is asleep or stationary: the same cells that were activated during navigation are reactivated in the same sequential order, but this time on a much faster timescale—within a few hundred milliseconds (see @fig-sleep-replay).
+This phenomenon is called replay.
+
+::: {#fig-sleep-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-sleep)
+
+![](images/replay-linear-track-forward)
+
+Forward replay during sleep. Adapted from @carr2011nn.
+:::
+
+Replay, however, does not only occur during sleep; it also happens in the awake state.
+For example, when the rodent is at the beginning of the track, **forward replay** can depict the upcoming trajectory the animal is about to follow (see @fig-forward-replay). 
+
+::: {#fig-forward-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-deliberation)
+
+![](images/replay-linear-track-forward)
+
+Forward replay at the beginning of the linear track. Adapted from @carr2011nn.
+:::
+
+Moreover, replay can occur not only in the same order as experience but also in reverse.
+**Backward replay** is typically observed when the animal reaches a rewarding location at the end of the track (see @fig-backward-replay).
+
+::: {#fig-backward-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-reward)
+
+![](images/replay-linear-track-backward)
+
+Backward replay at the end of the linear track. Adapted from @carr2011nn.
+:::
+
+While most replay research focuses on the hippocampus, many studies now show that replay-like sequences are distributed throughout the brain, including areas like the prefrontal cortex and visual cortex.
+
+## Replay in humans
+
+When studying replay in humans, we must consider three key properties: **replay is (1) sequential, (2) fast, and (3) anatomically distributed**.
+This poses a challenge for non-invasive neuroimaging, as we need methods with both high temporal and spatial resolution.
+
+## Methods
+
+### fMRI
+
+::: {#fig-human-replay layout="[0.25, 0.375, 0.375]"}
+![](images/replay-rodent-brain-cell-recording)
+
+![](images/replay-human-brain-fmri-forward)
+
+![](images/replay-human-brain-fmri-backward)
+
+Replay in humans compared to rodents.
+:::
+
+@schuck2019s
+
+@wittkuhn2021nc
