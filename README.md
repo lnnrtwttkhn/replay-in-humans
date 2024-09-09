@@ -14,7 +14,6 @@ Just click the green **Use this template** button to get started.
 ### Setup
 
 - [ ] Edit information in `README.md`, `index.qmd` and `_variables.yml`
-- [ ] Rename `.Rproj` file
 - [ ] URL in `plausible.html`
 - [ ] `IMAGES_URL` in `Makefile`
 - [ ] `title` in `_variables.yml`
