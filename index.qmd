@@ -1,0 +1,8 @@
+---
+title: "{{< var title >}}"
+subtitle: "{{< var subtitle >}}"
+date: today
+engine: knitr
+abstract: "This is the abstract."
+abstract-title: "Abstract"
+---
