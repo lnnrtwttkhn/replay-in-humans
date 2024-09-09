@@ -22,7 +22,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -79,8 +99,19 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#replay-in-humans" id="toc-replay-in-humans" class="nav-link" data-scroll-target="#replay-in-humans">Replay in humans</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#fmri" id="toc-fmri" class="nav-link" data-scroll-target="#fmri">fMRI</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -142,10 +173,123 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>How does the brain use past experience to guide future actions? A particularly interesting phenomenon in this context is replay, typically described as the reactivation of activity patterns in the brain that reflect previous experiences.</p>
+<p>Most insights about replay have come from electrophysiological studies of rodent spatial navigation. In these studies, replay is often investigated as follows: A rodent navigates a spatial environment, such as a simple linear track. In the rodent’s brain, cells in the hippocampus, known as place cells, are activated when the animal occupies a specific location in that environment. As the rodent moves along the track, these place cells are activated in a specific sequential order that reflects the animal’s trajectory (see <a href="#fig-linear-track" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<div id="fig-linear-track" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-linear-track-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/replay-linear-track-activation-movement.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-linear-track-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Rodent on a linear track. Adapted from <span class="citation" data-cites="carr2011nn">Carr et al. (<a href="#ref-carr2011nn" role="doc-biblioref">2011</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The fascinating part happens when the rodent is asleep or stationary: the same cells that were activated during navigation are reactivated in the same sequential order, but this time on a much faster timescale—within a few hundred milliseconds (see <a href="#fig-sleep-replay" class="quarto-xref">Figure&nbsp;2</a>). This phenomenon is called replay.</p>
+<div id="fig-sleep-replay" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sleep-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 68.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-activation-sleep.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 31.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-forward.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sleep-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Forward replay during sleep. Adapted from <span class="citation" data-cites="carr2011nn">Carr et al. (<a href="#ref-carr2011nn" role="doc-biblioref">2011</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Replay, however, does not only occur during sleep; it also happens in the awake state. For example, when the rodent is at the beginning of the track, <strong>forward replay</strong> can depict the upcoming trajectory the animal is about to follow (see <a href="#fig-forward-replay" class="quarto-xref">Figure&nbsp;3</a>).</p>
+<div id="fig-forward-replay" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-forward-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 68.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-activation-deliberation.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 31.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-forward.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forward-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Forward replay at the beginning of the linear track. Adapted from <span class="citation" data-cites="carr2011nn">Carr et al. (<a href="#ref-carr2011nn" role="doc-biblioref">2011</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Moreover, replay can occur not only in the same order as experience but also in reverse. <strong>Backward replay</strong> is typically observed when the animal reaches a rewarding location at the end of the track (see <a href="#fig-backward-replay" class="quarto-xref">Figure&nbsp;4</a>).</p>
+<div id="fig-backward-replay" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-backward-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 68.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-activation-reward.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 31.5%;justify-content: center;">
+<p><img src="images/replay-linear-track-backward.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-backward-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Backward replay at the end of the linear track. Adapted from <span class="citation" data-cites="carr2011nn">Carr et al. (<a href="#ref-carr2011nn" role="doc-biblioref">2011</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>While most replay research focuses on the hippocampus, many studies now show that replay-like sequences are distributed throughout the brain, including areas like the prefrontal cortex and visual cortex.</p>
+</section>
+<section id="replay-in-humans" class="level2">
+<h2 class="anchored" data-anchor-id="replay-in-humans">Replay in humans</h2>
+<p>When studying replay in humans, we must consider three key properties: <strong>replay is (1) sequential, (2) fast, and (3) anatomically distributed</strong>. This poses a challenge for non-invasive neuroimaging, as we need methods with both high temporal and spatial resolution.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="fmri" class="level3">
+<h3 class="anchored" data-anchor-id="fmri">fMRI</h3>
+<div id="fig-human-replay" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-human-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="images/replay-rodent-brain-cell-recording.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: center;">
+<p><img src="images/replay-human-brain-fmri-forward.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: center;">
+<p><img src="images/replay-human-brain-fmri-backward.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-human-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Replay in humans compared to rodents.
+</figcaption>
+</figure>
+</div>
+<p><span class="citation" data-cites="schuck2019s">Schuck &amp; Niv (<a href="#ref-schuck2019s" role="doc-biblioref">2019</a>)</span></p>
+<p><span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span></p>
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section></div></main> <!-- /main -->
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-carr2011nn" class="csl-entry" role="listitem">
+Carr, M. F., Jadhav, S. P., &amp; Frank, L. M. (2011). Hippocampal replay in the awake state: a potential substrate for memory consolidation and retrieval. <em>Nature Neuroscience</em>, <em>14</em>(2), 147–153. <a href="https://doi.org/10.1038/nn.2732">https://doi.org/10.1038/nn.2732</a>
+</div>
+<div id="ref-schuck2019s" class="csl-entry" role="listitem">
+Schuck, N. W., &amp; Niv, Y. (2019). Sequential replay of nonspatial task states in the human hippocampus. <em>Science</em>, <em>364</em>(6447). <a href="https://doi.org/10.1126/science.aaw5181">https://doi.org/10.1126/science.aaw5181</a>
+</div>
+<div id="ref-wittkuhn2021nc" class="csl-entry" role="listitem">
+Wittkuhn, L., &amp; Schuck, N. W. (2021). Dynamics of fMRI patterns reflect sub-second activation sequences and reveal replay in human visual cortex. <em>Nature Communications</em>, <em>12</em>(1). <a href="https://doi.org/10.1038/s41467-021-21970-2">https://doi.org/10.1038/s41467-021-21970-2</a>
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section></div></main> <!-- /main -->
 <script defer="" data-domain="lennartwittkuhn.com/replay-in-humans" src="https://plausible.io/js/script.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
