@@ -16,8 +16,6 @@ Just click the green **Use this template** button to get started.
 - [ ] Edit information in `README.md`, `index.qmd` and `_variables.yml`
 - [ ] URL in `plausible.html`
 - [ ] `IMAGES_URL` in `Makefile`
-- [ ] `title` in `_variables.yml`
-- [ ] `subtitle` in `_variables.yml`
 - [ ] `project-name` in `_variables.yml`
 - [ ] `license` in `_variables.yml`
 - [ ] `doi` in `_variables.yml`
