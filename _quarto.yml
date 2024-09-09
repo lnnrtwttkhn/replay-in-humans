@@ -39,9 +39,9 @@ format:
     number-sections: false
     number-depth: 1
     # layout:
-    cap-location: margin
-    fig-cap-location: margin
-    tbl-cap-location: margin
+    cap-location: bottom
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
     page-layout: article
     title-block-style: default
     # code:
