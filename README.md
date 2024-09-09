@@ -2,7 +2,7 @@
 
 [![Quarto Publish](https://github.com/lnnrtwttkhn/replay-in-humans/actions/workflows/publish.yml/badge.svg)](https://github.com/lnnrtwttkhn/replay-in-humans/actions/workflows/publish.yml)
 [![Codespell](https://github.com/lnnrtwttkhn/replay-in-humans/actions/workflows/codespell.yml/badge.svg)](https://github.com/lnnrtwttkhn/replay-in-humans/actions/workflows/codespell.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 ## About
 
@@ -15,16 +15,14 @@ Just click the green **Use this template** button to get started.
 
 - [ ] Edit information in `README.md`, `index.qmd` and `_variables.yml`
 - [ ] `IMAGES_URL` in `Makefile`
-- [ ] `license` in `_variables.yml`
 - [ ] `doi` in `_variables.yml`
 - [ ] `date` in `index.qmd`
 - [ ] information in `README.md`
 - [ ] verify Quarto version in `.github/workflows/publish.yml`
-- [ ] update license information in `README.md` and `_variables.yml`
 
 ## License
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 ## Contributors
 
