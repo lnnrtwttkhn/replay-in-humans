@@ -14,7 +14,6 @@ Just click the green **Use this template** button to get started.
 ### Setup
 
 - [ ] Edit information in `README.md`, `index.qmd` and `_variables.yml`
-- [ ] `IMAGES_URL` in `Makefile`
 - [ ] `doi` in `_variables.yml`
 - [ ] `date` in `index.qmd`
 - [ ] information in `README.md`
