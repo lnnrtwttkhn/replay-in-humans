@@ -6,6 +6,8 @@ project:
     browser: true
     watch-inputs: true
     navigate: true
+  render:
+    - "!data/"
 format:
   html:
     # format options:
