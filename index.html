@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dr.&nbsp;Lennart Wittkuhn">
-<meta name="dcterms.date" content="2024-09-09">
+<meta name="dcterms.date" content="2024-09-10">
 
 <title>Replay in humans</title>
 <style>
@@ -108,7 +108,11 @@ div.csl-indent {
   <li><a href="#replay-in-humans" id="toc-replay-in-humans" class="nav-link" data-scroll-target="#replay-in-humans">Replay in humans</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
-  <li><a href="#fmri" id="toc-fmri" class="nav-link" data-scroll-target="#fmri">fMRI</a></li>
+  <li><a href="#fmri-background-knowledge" id="toc-fmri-background-knowledge" class="nav-link" data-scroll-target="#fmri-background-knowledge">fMRI background knowledge</a></li>
+  <li><a href="#replay-in-fmri" id="toc-replay-in-fmri" class="nav-link" data-scroll-target="#replay-in-fmri">Replay in fMRI</a></li>
+  <li><a href="#between-tr-decoding" id="toc-between-tr-decoding" class="nav-link" data-scroll-target="#between-tr-decoding">Between-TR decoding</a></li>
+  <li><a href="#within-tr-decoding" id="toc-within-tr-decoding" class="nav-link" data-scroll-target="#within-tr-decoding">Within-TR decoding</a></li>
+  <li><a href="#classifier-training" id="toc-classifier-training" class="nav-link" data-scroll-target="#classifier-training">Classifier training</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -155,7 +159,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2024</p>
+      <p class="date">September 10, 2024</p>
     </div>
   </div>
   
@@ -249,20 +253,56 @@ Figure&nbsp;4: Backward replay at the end of the linear track. Adapted from <spa
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<section id="fmri" class="level3">
-<h3 class="anchored" data-anchor-id="fmri">fMRI</h3>
+<section id="fmri-background-knowledge" class="level3">
+<h3 class="anchored" data-anchor-id="fmri-background-knowledge">fMRI background knowledge</h3>
+<ul>
+<li>TR = Repetition Time, usually expressed in seconds or milliseconds. The TR indicates how frequently an entire volume of fMRI data (i.e., the entire brain is recorded)</li>
+<li>HRF = Hemodynamic Response Function, models the response of the blood supply in relation to a presumed neural response.</li>
+</ul>
+</section>
+<section id="replay-in-fmri" class="level3">
+<h3 class="anchored" data-anchor-id="replay-in-fmri">Replay in fMRI</h3>
+<div class="callout callout-style-default callout-tip callout-titled" title="FAQ: Wouldn't it be better to sample more frequently, i.e., have a faster TR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+FAQ: Wouldn’t it be better to sample more frequently, i.e., have a faster TR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Short answer: No, not necessarily, because the underlying hemodynamics (slow rise and fall of the HRF) stay the same, independent of the speed of the sampling rate. For a similar line of arguments, see <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span>.</p>
+</div>
+</div>
+<p>Why to we even think that we can measure a fast sequential neural event like replay with fMRI? fMRI is known to be a slow method, because it measures neural activity indirectly through slow sampling of a delayed blood-oxygen level dependent response function. Let’s imagine a prototypical replay sequence as it might occur in the rodent brain (<a href="#fig-human-replay" class="quarto-xref">Figure&nbsp;5</a> a). This replay sequence consists of five place cells that are activated in sequence and the individual events are typically separated by 20 to 80 ms. What happens if the same replay sequence occurs in the human brain and we measure it with fMRI? Let’s imagine for simplicity that each of these events triggers its own independent HRF. This results in a set of largely overlapping HRFs but the critical idea is that these HRFs will be slightly delayed by the temporal offset between replay events in the sequence (<a href="#fig-human-replay" class="quarto-xref">Figure&nbsp;5</a> b). This means that the sequentiality of the replay sequence will translate into ordered fMRI activation that we can asses within a single measurement (TR). During earlier time points, earlier events will have a higher activation than later events (<a href="#fig-human-replay" class="quarto-xref">Figure&nbsp;5</a> b). This pattern reverses during the falling slopes of the HRFs (<a href="#fig-human-replay" class="quarto-xref">Figure&nbsp;5</a> c). In <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span> we tested this idea experimentally using multivariate fMRI methods.</p>
 <div id="fig-human-replay" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-human-replay-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="images/replay-rodent-brain-cell-recording.png" class="img-fluid figure-img"></p>
+<figcaption>(a)</figcaption>
+</figure>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: center;">
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="images/replay-human-brain-fmri-forward.png" class="img-fluid figure-img"></p>
+<figcaption>(b)</figcaption>
+</figure>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: center;">
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="images/replay-human-brain-fmri-backward.png" class="img-fluid figure-img"></p>
+<figcaption>(c)</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -271,11 +311,103 @@ Figure&nbsp;5: Replay in humans compared to rodents.
 </figcaption>
 </figure>
 </div>
-<p><span class="citation" data-cites="schuck2019s">Schuck &amp; Niv (<a href="#ref-schuck2019s" role="doc-biblioref">2019</a>)</span></p>
-<p><span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span></p>
+</section>
+<section id="between-tr-decoding" class="level3">
+<h3 class="anchored" data-anchor-id="between-tr-decoding">Between-TR decoding</h3>
+<ul>
+<li>Used in <span class="citation" data-cites="schuck2019s">Schuck &amp; Niv (<a href="#ref-schuck2019s" role="doc-biblioref">2019</a>)</span> and <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span> (<a href="#fig-schuck-niv-analysis" class="quarto-xref">Figure&nbsp;6</a>)</li>
+<li>Basic idea: Concurrently activated items (as during a replay event) will lead to clustered / overlapping activation of items that are decoded in successive TRs</li>
+<li>Procedure:
+<ol type="1">
+<li>Apply trained classifier to every TR of the time window of interest (e.g., resting-state period)</li>
+<li>Get the label of the decoded class (i.e., category with the highest classifier probability)</li>
+<li>Compare the frequency of label transitions in the decoded data to transitions between states in the task</li>
+</ol></li>
+</ul>
+<div id="fig-schuck-niv-analysis" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-schuck-niv-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/schuck-niv-science-figure2.jpeg" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-schuck-niv-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Taken from Figure 2 of <span class="citation" data-cites="schuck2019s">Schuck &amp; Niv (<a href="#ref-schuck2019s" role="doc-biblioref">2019</a>)</span>: Illustration of analysis procedure. For simplicity, only two dimensions and three state classes are shown. We first trained a classifier to distinguish between the different task states in the hippocampal fMRI data acquired during task performance. The trained classifier was then applied to each volume of fMRI data recorded during resting sessions (gray dots). This resulted in a sequence of classifier labels that was transformed into a transition matrix T that summarized the frequency of decoding each pair of task states consecutively. The structure of the decoded sequences, as summarized by this matrix, was then compared with the sequential structure of the task. The actual analysis involved 16-way classification of data with several thousand dimensions (each voxel is one dimension), which was compared with the task-state space.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="within-tr-decoding" class="level3">
+<h3 class="anchored" data-anchor-id="within-tr-decoding">Within-TR decoding</h3>
+<p>The slope of a linear regression relating classifier probabilities within each TR to their serial position can indicate the direction of the sequence (<a href="#fig-sequentiality-metric" class="quarto-xref">Figure&nbsp;8</a>). A forward sequence occurs when earlier events have higher probabilities and later events lower, resulting in a positive slope (forward sequentiality). Conversely, a backward sequence shows earlier events with lower probabilities and later events higher, producing a negative slope (backward sequentiality). This also emphasizes the need for probabilistic classifiers that represent the strength of an activated representation.</p>
+<div id="fig-sequentiality-metric" class="quarto-float quarto-figure quarto-figure-center anchored" width="100%">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sequentiality-metric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/sequentiality-metric.png" id="fig-sequentiality-metric" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sequentiality-metric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7
+</figcaption>
+</figure>
+</div>
+<div id="fig-sequentiality-metric" class="quarto-float quarto-figure quarto-figure-center anchored" width="100%">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sequentiality-metric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/wittkuhn2021nc-decoding-sequence.png" id="fig-sequentiality-metric" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sequentiality-metric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="FAQ: What is the sequentiality metric?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+FAQ: What is the sequentiality metric?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The main sequentiality metric used in <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span> is the <strong>slope of a linear regression relating classifier probabilities to serial positions at every TR</strong>.</p>
+</div>
+</div>
+</section>
+<section id="classifier-training" class="level3">
+<h3 class="anchored" data-anchor-id="classifier-training">Classifier training</h3>
+<section id="in-wittkuhn2021nc" class="level4">
+<h4 class="anchored" data-anchor-id="in-wittkuhn2021nc">In <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span></h4>
+<p>In <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span>, five logistic regression classifiers were trained, one for each of the five images used. Classifiers were trained on a separate task condition, where images were presented individually with longer delays (<a href="#fig-wittkuhn2021nc-decoding" class="quarto-xref">Figure&nbsp;9</a> a). Decoding visual images from visual cortex worked well and reached about 70% decoding accuracy (<a href="#fig-wittkuhn2021nc-decoding" class="quarto-xref">Figure&nbsp;9</a> b left). Classifiers were probabilistic. That means, instead of predicting a single category, they provide a probability for each of the five classes. When trained classifiers were applied to several TRs following onsets of single images, classifier probabilities increase, peak and decrease again (<a href="#fig-wittkuhn2021nc-decoding" class="quarto-xref">Figure&nbsp;9</a> b middle). This pattern indicates that classifier probabilities trace the underlying hemodynamic response on single trials.</p>
+<div id="fig-wittkuhn2021nc-decoding" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wittkuhn2021nc-decoding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 30.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wittkuhn2021nc-classifier-training.png" class="img-fluid figure-img"></p>
+<figcaption>(a)</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 70.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/wittkuhn2021nc-decoding-results.png" class="img-fluid figure-img"></p>
+<figcaption>(b)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wittkuhn2021nc-decoding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Classifier training in <span class="citation" data-cites="wittkuhn2021nc">Wittkuhn &amp; Schuck (<a href="#ref-wittkuhn2021nc" role="doc-biblioref">2021</a>)</span>.
+</figcaption>
+</figure>
+</div>
 
 
 
+</section>
 </section>
 </section>
 
