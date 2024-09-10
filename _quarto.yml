@@ -6,21 +6,6 @@ project:
     browser: true
     watch-inputs: true
     navigate: true
-author:
-- id: wittkuhn
-  name:
-    given: Lennart
-    family: Wittkuhn
-    literal: Dr. Lennart Wittkuhn
-  url: "{{< var homepage >}}"
-  email: "{{< var email >}}"
-  orcid: "{{< var orcid >}}"
-  attributes:
-    corresponding: true
-  affiliations:
-    - ref: uhh-psych
-    - ref: mpib
-    - ref: mps-ucl
 format:
   html:
     # format options:

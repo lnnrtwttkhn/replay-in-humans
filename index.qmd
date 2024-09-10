@@ -2,6 +2,21 @@
 title: "{{< var title >}}"
 subtitle: "{{< var subtitle >}}"
 date: today
+author:
+- id: wittkuhn
+  name:
+    given: Lennart
+    family: Wittkuhn
+    literal: Dr. Lennart Wittkuhn
+  url: "{{< var homepage >}}"
+  email: "{{< var email >}}"
+  orcid: "{{< var orcid >}}"
+  attributes:
+    corresponding: true
+  affiliations:
+    - ref: uhh-psych
+    - ref: mpib
+    - ref: mps-ucl
 engine: knitr
 abstract: "This is the abstract."
 abstract-title: "Abstract"
@@ -141,3 +156,6 @@ This pattern indicates that classifier probabilities trace the underlying hemody
 
 Classifier training in @wittkuhn2021nc.
 :::
+
+{{< embed notebooks/analysis.qmd >}}
+
