@@ -20,6 +20,11 @@ images:
 	unzip -j -o $(IMAGES_ARCHIVE) -d $(IMAGES_DIR)
 	rm -f $(IMAGES_ARCHIVE)
 
+.PHONY: data
+data:
+	datalad clone https://github.com/lnnrtwttkhn/highspeed-decoding/ data/highspeed
+	datalad get data/highspeed/decoding/sub-*/data/sub-*_decoding.csv -J 8
+
 .PHONY: clean
 clean:
 	rm -rf _site $(IMAGES_DIR)*
