@@ -1,0 +1,70 @@
+---
+title: "Decoding accuracy in Wittkuhn & Schuck, 2021"
+page-layout: full
+---
+
+```{r}
+library("data.table")
+library("magrittr")
+library("assertr")
+library("ggplot2")
+```
+
+```{r}
+path_data <- here::here("data", "highspeed", "decoding", "sub-*", "data", "sub-*_decoding.csv")
+data <- rbindlist(lapply(Sys.glob(path_data), fread))
+# create a list of participants to exclude based on behavioral performance:
+sub_exclude <- c("sub-24", "sub-31", "sub-37", "sub-40")
+```
+
+From @wittkuhn2021nc:
+
+> Cross-validated (leave-one-run-out) classification accuracy was on average 69.22% (SD = 11.18%; t(35) = 26.41, 95% CI [66.07, + ∞], p < 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
+
+```{r}
+dt_decoding_accuracy <- data %>%
+  .[!(id %in% sub_exclude), ] %>%
+  .[test_set == "test-odd_peak", ] %>%
+  .[class != "other", ] %>%
+  .[classifier != "log_reg", ] %>%
+  .[mask == "cv", ] %>%
+  .[, by = .(id, trial, stim), .(
+      max_prob_label = class[which.max(probability)],
+      num_classes = .N
+    )] %>%
+  verify(num_classes == 5) %>%
+  .[, accuracy := ifelse(stim == max_prob_label, 1, 0)] %>%
+  .[, by = .(id), .(
+    mean_accuracy = mean(accuracy) * 100, 
+    num_trials = .N
+  )] %>%
+  verify(all(num_trials <= 480))
+```
+
+Cross-validated (leave-one-run-out) classification accuracy was on average `r round(mean(dt_decoding_accuracy$mean_accuracy), 2)`% (SD = `r round(sd(dt_decoding_accuracy$mean_accuracy), 2)`%; t(35) = 26.41, 95% CI [66.07, + ∞], p < 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
+
+```{r}
+ggplot(data = dt_decoding_accuracy, aes(x = 1, y = mean_accuracy)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "lightgray") +
+  geom_dotplot(binaxis = "y", stackdir = "center", stackratio = 0.5,
+               color = "black", fill = "lightgray", alpha = 0.5,
+               inherit.aes = TRUE, binwidth = 2) +
+  geom_errorbar(stat = "summary", fun.data = "mean_se", width = 0.0, color = "black") +
+  xlab("Condition") +
+  ylab("Accuracy (%)") +
+  geom_hline(aes(yintercept = 20), linetype = "dashed", color = "black") +
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.line.x = element_blank()) +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  annotate("text", x = 1, y = 15, label = "Chance", color = "black",
+           size = rel(2.5), family = "Helvetica", fontface = "plain") +
+  theme(panel.border = element_blank(), axis.line = element_line()) +
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank())
+```
+
+
