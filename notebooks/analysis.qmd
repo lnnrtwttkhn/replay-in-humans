@@ -11,8 +11,8 @@ library("ggplot2")
 ```
 
 ```{r}
-path_data <- here::here("data", "highspeed", "decoding", "sub-*", "data", "sub-*_decoding.csv")
-data <- rbindlist(lapply(Sys.glob(path_data), fread))
+path_input <- here::here("data", "data.tsv")
+data <- data.table::fread(path_input)
 # create a list of participants to exclude based on behavioral performance:
 sub_exclude <- c("sub-24", "sub-31", "sub-37", "sub-40")
 ```

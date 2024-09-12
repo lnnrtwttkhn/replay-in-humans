@@ -24,6 +24,7 @@ images:
 data:
 	datalad clone https://github.com/lnnrtwttkhn/highspeed-decoding/ data/highspeed
 	datalad get data/highspeed/decoding/sub-*/data/sub-*_decoding.csv -J 8
+	Rscript -e 'renv::run("notebooks/data.R")'
 
 .PHONY: clean
 clean:
