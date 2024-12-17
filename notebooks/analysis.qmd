@@ -8,6 +8,8 @@ library("data.table")
 library("magrittr")
 library("assertr")
 library("ggplot2")
+library("forcats")
+library("cowplot")
 ```
 
 ```{r}
@@ -19,7 +21,7 @@ sub_exclude <- c("sub-24", "sub-31", "sub-37", "sub-40")
 
 From @wittkuhn2021nc:
 
-> Cross-validated (leave-one-run-out) classification accuracy was on average 69.22% (SD = 11.18%; t(35) = 26.41, 95% CI [66.07, + ∞], p < 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
+> Cross-validated (leave-one-run-out) classification accuracy was on average 69.22% (SD = 11.18%; t(35) = 26.41, 95% CI \[66.07, + ∞\], p \< 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
 
 ```{r}
 dt_decoding_accuracy <- data %>%
@@ -41,10 +43,10 @@ dt_decoding_accuracy <- data %>%
   verify(all(num_trials <= 480))
 ```
 
-Cross-validated (leave-one-run-out) classification accuracy was on average `r round(mean(dt_decoding_accuracy$mean_accuracy), 2)`% (SD = `r round(sd(dt_decoding_accuracy$mean_accuracy), 2)`%; t(35) = 26.41, 95% CI [66.07, + ∞], p < 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
+Cross-validated (leave-one-run-out) classification accuracy was on average `r round(mean(dt_decoding_accuracy$mean_accuracy), 2)`% (SD = `r round(sd(dt_decoding_accuracy$mean_accuracy), 2)`%; t(35) = 26.41, 95% CI \[66.07, + ∞\], p \< 0.001, compared to chance (20%); d = 4.40; Fig. 2a).
 
 ```{r}
-ggplot(data = dt_decoding_accuracy, aes(x = 1, y = mean_accuracy)) +
+figure1a <- ggplot(data = dt_decoding_accuracy, aes(x = 1, y = mean_accuracy)) +
   geom_bar(stat = "summary", fun = "mean", fill = "lightgray") +
   geom_dotplot(binaxis = "y", stackdir = "center", stackratio = 0.5,
                color = "black", fill = "lightgray", alpha = 0.5,
@@ -67,4 +69,71 @@ ggplot(data = dt_decoding_accuracy, aes(x = 1, y = mean_accuracy)) +
         panel.background = element_blank())
 ```
 
+```{r}
+dt_single_time <- data %>%
+  .[!(id %in% sub_exclude), ] %>%
+  .[test_set == "test-odd_long", ] %>%
+  .[class != "other", ] %>%
+  .[classifier != "log_reg", ] %>%
+  .[mask == "cv", ] %>%
+  .[, by = .(id, seq_tr, class, stim), .(
+    num = .N,
+    mean_prob = mean(probability * 100),
+    current_stim = as.factor(class == unique(stim))
+  )] %>%
+  .[, class := as.factor(class)] %>%
+  .[, stim := as.factor(stim)] %>%
+  .[, seq_tr := as.factor(seq_tr)] %>%
+  .[, mean_prob := as.numeric(mean_prob)] %>%
+  .[, current_stim := forcats::fct_rev(as.factor(current_stim))]
 
+dt_single_time_mean <- dt_single_time %>% 
+  # average across participants:
+  .[, by = .(seq_tr, class, stim, current_stim), .(
+    mean_prob = as.numeric(mean(mean_prob)),
+    num_subs = .N,
+    sem_upper = (mean(mean_prob) + (sd(mean_prob)/sqrt(.N))),
+    sem_lower = (mean(mean_prob) - (sd(mean_prob)/sqrt(.N)))
+  )] %>%
+  verify(num_subs == 36)
+```
+
+```{r}
+figure1b <- ggplot(data = dt_single_time_mean, aes(x = seq_tr, y = mean_prob)) +
+  facet_wrap(~ stim) +
+  geom_line(data = dt_single_time, aes(
+    group = interaction(id, class), color = current_stim), alpha = 0.3) +
+  geom_line(data = subset(dt_single_time, current_stim == 0), aes(
+    group = interaction(id, class), color = current_stim), alpha = 0.3) +
+  geom_line(data = subset(dt_single_time, current_stim == 1), aes(
+    group = interaction(id, class), color = current_stim), alpha = 0.3) +
+  geom_ribbon(data = dt_single_time_mean, aes(
+    ymin = sem_lower, ymax = sem_upper, fill = current_stim, group = class),
+    color = NA) +
+  geom_line(data = dt_single_time_mean, aes(color = current_stim, group = class)) +
+  geom_ribbon(data = subset(dt_single_time_mean, current_stim == 1), aes(
+    ymin = sem_lower, ymax = sem_upper, fill = current_stim, group = class),
+    alpha = 0.3, color = NA) +
+  geom_line(data = subset(dt_single_time_mean, current_stim == 1), aes(
+    color = current_stim, group = class)) +
+  ylab("Probability (%)") + 
+  xlab("Time from stimulus onset (TRs)") +
+  scale_fill_manual(name = "Classified class", values = c("black", "lightgray"), labels = c("true", "other")) +
+  scale_color_manual(name = "Classified class", values = c("black", "lightgray"), labels = c("true", "other")) +
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0)) +
+  #theme(legend.position = c(0.95, 0.8), legend.justification = c(1, 0)) +
+  #theme(legend.title = element_text(size = 8), legend.text = element_text(size = 8)) +
+  #theme(legend.key.size = unit(0.7, "line")) +
+  guides(color = guide_legend(ncol = 2), fill = guide_legend(ncol = 2)) +
+  theme(strip.text.x = element_text(margin = margin(b = 2, t = 2))) +
+  theme(panel.border = element_blank(), axis.line = element_line()) +
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank())
+```
+
+```{r}
+plot_grid(figure1a, figure1b, labels = c("a", "b"), ncol = 2, rel_widths = c(0.2, 0.8), label_fontface = "bold")
+```
