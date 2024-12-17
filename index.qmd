@@ -2,7 +2,160 @@
 title: "{{< var title >}}"
 subtitle: "{{< var subtitle >}}"
 date: today
+author:
+- id: wittkuhn
+  name:
+    given: Lennart
+    family: Wittkuhn
+    literal: Dr. Lennart Wittkuhn
+  url: "{{< var homepage >}}"
+  email: "{{< var email >}}"
+  orcid: "{{< var orcid >}}"
+  attributes:
+    corresponding: true
+  affiliations:
+    - ref: uhh-psych
+    - ref: mpib
+    - ref: mps-ucl
 engine: knitr
 abstract: "This is the abstract."
 abstract-title: "Abstract"
 ---
+
+## Introduction
+
+How does the brain use past experience to guide future actions?
+A particularly interesting phenomenon in this context is replay, typically described as the reactivation of activity patterns in the brain that reflect previous experiences.
+
+Most insights about replay have come from electrophysiological studies of rodent spatial navigation.
+In these studies, replay is often investigated as follows: A rodent navigates a spatial environment, such as a simple linear track.
+In the rodent's brain, cells in the hippocampus, known as place cells, are activated when the animal occupies a specific location in that environment.
+As the rodent moves along the track, these place cells are activated in a specific sequential order that reflects the animal's trajectory (see @fig-linear-track).
+
+![Rodent on a linear track. Adapted from @carr2011nn.](images/replay-linear-track-activation-movement){#fig-linear-track width="60%"}
+
+The fascinating part happens when the rodent is asleep or stationary: the same cells that were activated during navigation are reactivated in the same sequential order, but this time on a much faster timescale—within a few hundred milliseconds (see @fig-sleep-replay).
+This phenomenon is called replay.
+
+::: {#fig-sleep-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-sleep)
+
+![](images/replay-linear-track-forward)
+
+Forward replay during sleep. Adapted from @carr2011nn.
+:::
+
+Replay, however, does not only occur during sleep; it also happens in the awake state.
+For example, when the rodent is at the beginning of the track, **forward replay** can depict the upcoming trajectory the animal is about to follow (see @fig-forward-replay). 
+
+::: {#fig-forward-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-deliberation)
+
+![](images/replay-linear-track-forward)
+
+Forward replay at the beginning of the linear track. Adapted from @carr2011nn.
+:::
+
+Moreover, replay can occur not only in the same order as experience but also in reverse.
+**Backward replay** is typically observed when the animal reaches a rewarding location at the end of the track (see @fig-backward-replay).
+
+::: {#fig-backward-replay layout="[0.685, 0.315]"}
+![](images/replay-linear-track-activation-reward)
+
+![](images/replay-linear-track-backward)
+
+Backward replay at the end of the linear track. Adapted from @carr2011nn.
+:::
+
+While most replay research focuses on the hippocampus, many studies now show that replay-like sequences are distributed throughout the brain, including areas like the prefrontal cortex and visual cortex.
+
+## Replay in humans
+
+When studying replay in humans, we must consider three key properties: **replay is (1) sequential, (2) fast, and (3) anatomically distributed**.
+This poses a challenge for non-invasive neuroimaging, as we need methods with both high temporal and spatial resolution.
+
+## Methods
+
+### fMRI background knowledge
+
+- TR = Repetition Time, usually expressed in seconds or milliseconds.
+The TR indicates how frequently an entire volume of fMRI data (i.e., the entire brain is recorded)
+- HRF = Hemodynamic Response Function, models the response of the blood supply in relation to a presumed neural response.
+
+### Replay in fMRI
+
+::: {.callout-tip title="FAQ: Wouldn't it be better to sample more frequently, i.e., have a faster TR"}
+Short answer: No, not necessarily, because the underlying hemodynamics (slow rise and fall of the HRF) stay the same, independent of the speed of the sampling rate.
+For a similar line of arguments, see @wittkuhn2021nc.
+:::
+
+Why to we even think that we can measure a fast sequential neural event like replay with fMRI?
+fMRI is known to be a slow method, because it measures neural activity indirectly through slow sampling of a delayed blood-oxygen level dependent response function.
+Let’s imagine a prototypical replay sequence as it might occur in the rodent brain (@fig-human-replay a).
+This replay sequence consists of five place cells that are activated in sequence and the individual events are typically separated by 20 to 80 ms.
+What happens if the same replay sequence occurs in the human brain and we measure it with fMRI?
+Let’s imagine for simplicity that each of these events triggers its own independent HRF.
+This results in a set of largely overlapping HRFs but the critical idea is that these HRFs will be slightly delayed by the temporal offset between replay events in the sequence (@fig-human-replay b).
+This means that the sequentiality of the replay sequence will translate into ordered fMRI activation that we can asses within a single measurement (TR).
+During earlier time points, earlier events will have a higher activation than later events (@fig-human-replay b).
+This pattern reverses during the falling slopes of the HRFs (@fig-human-replay c).
+In @wittkuhn2021nc we tested this idea experimentally using multivariate fMRI methods.
+
+::: {#fig-human-replay layout="[0.25, 0.375, 0.375]"}
+![(a)](images/replay-rodent-brain-cell-recording)
+
+![(b)](images/replay-human-brain-fmri-forward)
+
+![(c)](images/replay-human-brain-fmri-backward)
+
+Replay in humans compared to rodents.
+:::
+
+### Between-TR decoding
+
+- Used in @schuck2019s and @wittkuhn2021nc (@fig-schuck-niv-analysis)
+- Basic idea: Concurrently activated items (as during a replay event) will lead to clustered / overlapping activation of items that are decoded in successive TRs
+- Procedure:
+  1. Apply trained classifier to every TR of the time window of interest (e.g., resting-state period)
+  2. Get the label of the decoded class (i.e., category with the highest classifier probability)
+  3. Compare the frequency of label transitions in the decoded data to transitions between states in the task
+
+![Taken from Figure 2 of @schuck2019s: Illustration of analysis procedure. For simplicity, only two dimensions and three state classes are shown. We first trained a classifier to distinguish between the different task states in the hippocampal fMRI data acquired during task performance. The trained classifier was then applied to each volume of fMRI data recorded during resting sessions (gray dots). This resulted in a sequence of classifier labels that was transformed into a transition matrix T that summarized the frequency of decoding each pair of task states consecutively. The structure of the decoded sequences, as summarized by this matrix, was then compared with the sequential structure of the task. The actual analysis involved 16-way classification of data with several thousand dimensions (each voxel is one dimension), which was compared with the task-state space.](images/schuck-niv-science-figure2.jpeg){#fig-schuck-niv-analysis width="60%"}
+
+### Within-TR decoding
+
+The slope of a linear regression relating classifier probabilities within each TR to their serial position can indicate the direction of the sequence (@fig-sequentiality-metric).
+A forward sequence occurs when earlier events have higher probabilities and later events lower, resulting in a positive slope (forward sequentiality).
+Conversely, a backward sequence shows earlier events with lower probabilities and later events higher, producing a negative slope (backward sequentiality).
+This also emphasizes the need for probabilistic classifiers that represent the strength of an activated representation. 
+
+![](images/sequentiality-metric){#fig-sequentiality-metric width="100%"}
+
+![](images/wittkuhn2021nc-decoding-sequence){#fig-sequentiality-metric width="100%"}
+
+::: {.callout-tip title="FAQ: What is the sequentiality metric?"}
+The main sequentiality metric used in @wittkuhn2021nc is the **slope of a linear regression relating classifier probabilities to serial positions at every TR**.
+:::
+
+### Classifier training
+
+#### In @wittkuhn2021nc
+
+In @wittkuhn2021nc, five logistic regression classifiers were trained, one for each of the five images used.
+Classifiers were trained on a separate task condition, where images were presented individually with longer delays (@fig-wittkuhn2021nc-decoding a).
+Decoding visual images from visual cortex worked well and reached about 70% decoding accuracy (@fig-wittkuhn2021nc-decoding b left).
+Classifiers were probabilistic.
+That means, instead of predicting a single category, they provide a probability for each of the five classes.
+When trained classifiers were applied to several TRs following onsets of single images, classifier probabilities increase, peak and decrease again (@fig-wittkuhn2021nc-decoding b middle).
+This pattern indicates that classifier probabilities trace the underlying hemodynamic response on single trials.
+
+::: {#fig-wittkuhn2021nc-decoding layout="[0.3, 0.7]"}
+![(a)](images/wittkuhn2021nc-classifier-training)
+
+![(b)](images/wittkuhn2021nc-decoding-results)
+
+Classifier training in @wittkuhn2021nc.
+:::
+
+{{< embed notebooks/analysis.qmd >}}
+

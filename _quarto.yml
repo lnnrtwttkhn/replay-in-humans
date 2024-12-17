@@ -1,26 +1,13 @@
 project:
-  type: website
+  type: manuscript
   output-dir: _site
   preview:
     port: 4200
     browser: true
     watch-inputs: true
     navigate: true
-author:
-- id: wittkuhn
-  name:
-    given: Lennart
-    family: Wittkuhn
-    literal: Dr. Lennart Wittkuhn
-  url: "{{< var homepage >}}"
-  email: "{{< var email >}}"
-  orcid: "{{< var orcid >}}"
-  attributes:
-    corresponding: true
-  affiliations:
-    - ref: uhh-psych
-    - ref: mpib
-    - ref: mps-ucl
+  render:
+    - "!data/"
 format:
   html:
     # format options:
@@ -39,9 +26,9 @@ format:
     number-sections: false
     number-depth: 1
     # layout:
-    cap-location: margin
-    fig-cap-location: margin
-    tbl-cap-location: margin
+    cap-location: bottom
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
     page-layout: article
     title-block-style: default
     # code:
